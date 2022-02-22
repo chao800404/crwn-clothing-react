@@ -11,3 +11,7 @@ a,a:link,a:visited {
 li {
     list-style: none;
 }
+
+*,*::after,*::before{
+    box-sizing: border-box;
+}
