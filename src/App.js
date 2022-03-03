@@ -16,7 +16,6 @@ import { onSnapshot } from "firebase/firestore";
 import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 import { createStructuredSelector } from "reselect";
-import store from "./redux/store";
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
@@ -35,7 +34,6 @@ class App extends React.Component {
         });
       } else setCurrentUser(userAuth);
     });
-    store.subscribe(() => console.log(store.getState()));
   }
 
   componentWillUnmount() {
