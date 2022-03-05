@@ -2,8 +2,14 @@
 
 import React from "react";
 import "./header.style.scss";
+import {
+  HeaderContainer,
+  LogoContainer,
+  OptionsContainer,
+  OptionLink,
+} from "./header.styles";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
-import { Link } from "react-router-dom";
+
 import { getAuth, signOut } from "firebase/auth";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -14,45 +20,25 @@ import { selectCartHidden } from "../../redux/cart/cart.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 const Header = ({ currentUser, hidden }) => (
-  <header className="header">
-    <Link className="logo-container" to="/">
+  <HeaderContainer>
+    <LogoContainer to="/">
       <Logo className="logo" />
-    </Link>
-    <ul className="options">
-      <li>
-        {" "}
-        <Link className="option" to="/shop">
-          SHOP
-        </Link>
-      </li>
+    </LogoContainer>
+    <OptionsContainer>
+      <OptionLink to="/shop">SHOP</OptionLink>
 
-      <li>
-        <Link className="option" to="/contact">
-          CONTACT
-        </Link>
-      </li>
-      <li>
-        {currentUser ? (
-          <div
-            className="option"
-            onClick={() => {
-              const auth = getAuth();
-              signOut(auth);
-            }}
-          >
-            SIGN OUT
-          </div>
-        ) : (
-          <Link className="option" to="/signIn">
-            SIGN IN
-            {console.log(currentUser)}
-          </Link>
-        )}
-      </li>
+      <OptionLink to="/contact">CONTACT</OptionLink>
+      {currentUser ? (
+        <OptionLink as="div" onClick={() => signOut(getAuth())}>
+          SIGN OUT
+        </OptionLink>
+      ) : (
+        <OptionLink to="/signIn">SIGN IN</OptionLink>
+      )}
       <CartIcon />
-    </ul>
+    </OptionsContainer>
     {hidden ? null : <CartDropdown />}
-  </header>
+  </HeaderContainer>
 );
 
 const mapStateToProps = createStructuredSelector({

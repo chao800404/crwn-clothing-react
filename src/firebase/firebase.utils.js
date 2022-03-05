@@ -7,7 +7,14 @@ import {
   //   FacebookAuthProvider,
 } from "firebase/auth";
 
-import { doc, getDoc, setDoc, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  getFirestore,
+  collection,
+  writeBatch,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCHzLF-jAfhoPE1P5sT27zcnBfxrK86a-Q",
@@ -21,7 +28,7 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-const db = getFirestore();
+export const db = getFirestore();
 
 export const auth = getAuth();
 
@@ -49,7 +56,34 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 };
 
 const googleProvider = new GoogleAuthProvider();
-// const fbProvider = new FacebookAuthProvider();
+const batch = writeBatch(db);
+
+export const addCollectionDoc = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey);
+
+  objectsToAdd.forEach((obj) => {
+    const nycRef = doc(collectionRef);
+    batch.set(nycRef, obj);
+  });
+
+  return await batch.commit();
+};
+
+export const convertCollectionsSnapshotToMap = (collection) => {
+  const transformedCollection = collection.docs.map((doc) => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+  return transformedCollection.reduce((acc, collection) => {
+    acc[collection.title.toLowerCase()] = collection;
+    return acc;
+  }, {});
+};
 
 export function signInWithGoogle() {
   signInWithPopup(auth, googleProvider)
@@ -60,13 +94,3 @@ export function signInWithGoogle() {
       GoogleAuthProvider.credentialFromError(error);
     });
 }
-
-// export function signInWithFacebook() {
-//   signInWithPopup(auth, fbProvider)
-//     .then((result) => {
-//       FacebookAuthProvider.credentialFromResult(result);
-//     })
-//     .catch((error) => {
-//       FacebookAuthProvider.credentialFromError(error);
-//     });
-// }
