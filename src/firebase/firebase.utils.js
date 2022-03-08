@@ -4,6 +4,9 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
+  onAuthStateChanged,
+  signOut,
+  createUserWithEmailAndPassword,
   //   FacebookAuthProvider,
 } from "firebase/auth";
 
@@ -85,12 +88,21 @@ export const convertCollectionsSnapshotToMap = (collection) => {
   }, {});
 };
 
-export function signInWithGoogle() {
-  signInWithPopup(auth, googleProvider)
-    .then((result) => {
-      GoogleAuthProvider.credentialFromResult(result);
-    })
-    .catch((error) => {
-      GoogleAuthProvider.credentialFromError(error);
-    });
-}
+export const getCurrentUser = () =>
+  new Promise((resolve, reject) => {
+    const unsubsribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubsribe();
+        resolve(user);
+      },
+      reject
+    );
+  });
+
+export const signUpUser = (email, password) =>
+  createUserWithEmailAndPassword(auth, email, password);
+
+export const googleProviders = () => signInWithPopup(auth, googleProvider);
+
+export const signOuts = () => signOut(auth);

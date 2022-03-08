@@ -10,10 +10,7 @@ import ShopPage from "./page/shop/shop.components";
 import SignInAndSignUpPage from "./page/sign-in-sign-up/sign-in-sign-up.component";
 import CheckoutPage from "./page/checkout/checkout.components";
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { createUserProfileDocument } from "../src/firebase/firebase.utils";
-import { onSnapshot } from "firebase/firestore";
-import { setCurrentUser } from "./redux/user/user.actions";
+import { checkUserSession } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 import { createStructuredSelector } from "reselect";
 
@@ -21,19 +18,20 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
-    const auth = getAuth();
-    this.unsubscribeFromAuth = onAuthStateChanged(auth, async (userAuth) => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-        onSnapshot(userRef, (snapshot) => {
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data(),
-          });
-        });
-      } else setCurrentUser(userAuth);
-    });
+    const { checkUserSession } = this.props;
+    checkUserSession();
+    //   const auth = getAuth();
+    //   this.unsubscribeFromAuth = onAuthStateChanged(auth, async (userAuth) => {
+    //     if (userAuth) {
+    //       const userRef = await createUserProfileDocument(userAuth);
+    //       onSnapshot(userRef, (snapshot) => {
+    //         setCurrentUser({
+    //           id: snapshot.id,
+    //           ...snapshot.data(),
+    //         });
+    //       });
+    //     } else setCurrentUser(userAuth);
+    //   });
   }
 
   componentWillUnmount() {
@@ -70,7 +68,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  checkUserSession: () => dispatch(checkUserSession()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
