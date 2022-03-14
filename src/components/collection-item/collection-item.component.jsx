@@ -1,16 +1,19 @@
 /** @format */
 
 import React from "react";
-import "./collection-item.style.scss";
 import CustomBotton from "../custom-button/custom-botton.component";
 import { connect } from "react-redux";
 import { addItem } from "../../redux/cart/cart.action";
+import {
+  CollectionItemContainer,
+  CollectionFooterContainer,
+} from "./collection-item.style";
 
 const CollectionItem = ({ item, addItem }) => {
   const { name, price, imageUrl } = item;
 
   return (
-    <div className="collection-item">
+    <CollectionItemContainer>
       <div
         className="image"
         style={{
@@ -18,14 +21,14 @@ const CollectionItem = ({ item, addItem }) => {
         }}
       />
 
-      <div className="collection-footer">
+      <CollectionFooterContainer>
         <span className="name">{name}</span>
         <span className="price">{price}</span>
-      </div>
+      </CollectionFooterContainer>
       <CustomBotton onClick={() => addItem(item)} inverted>
         Add to cart
       </CustomBotton>
-    </div>
+    </CollectionItemContainer>
   );
 };
 
