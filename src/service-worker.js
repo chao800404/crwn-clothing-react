@@ -1,15 +1,4 @@
-/**
- * /* global self
- *
- * @format
- */
-
-/**
- * /* eslint-disable no-restricted-globals
- *
- * @format
- *
- */
+/** @format */
 
 // This service worker can be customized!
 // See https://developers.google.com/web/tools/workbox/modules
@@ -30,7 +19,7 @@ clientsClaim();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-/* eslint-disable-line no-restricted-globals */
+/* eslint-disable no-restricted-globals */
 precacheAndRoute(self.__WB_MANIFEST);
 
 // Set up App Shell-style routing, so that all navigation requests
@@ -60,8 +49,6 @@ registerRoute(
 
 // An example runtime caching route for requests that aren't handled by the
 // precache, in this case same-origin .png requests like those from in public/
-
-/* eslint-disable-line no-restricted-globals */
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
   ({ url }) =>
@@ -78,11 +65,8 @@ registerRoute(
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-
-/* eslint-disable-line no-restricted-globals */
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
-    /* eslint-disable-line no-restricted-globals */
     self.skipWaiting();
   }
 });
