@@ -24,4 +24,12 @@ export const GlobalStyle = createGlobalStyle`
     *,*::after,*::before{
         box-sizing: border-box;
     }
+
+    .element {
+    height: env(safe-area-inset-top);
+    width: env(safe-area-inset-left);
+    margin: env(safe-area-inset-right);
+    // you can also use fallback values
+    padding: env(safe-area-inset-bottom, 20px);
+}
 `;
