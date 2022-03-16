@@ -1,5 +1,5 @@
 /** @format */
-import React, { useEffect, lazy, Suspense } from "react";
+import React, { useEffect, lazy, Suspense, StrictMode } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -30,22 +30,24 @@ const App = ({ checkUserSession, currentUser }) => {
       <GlobalStyle />
       <Header />
 
-      <Switch>
-        <ErrorBoundary>
-          <Suspense fallback={<Spinner />}>
-            <Route exact path="/" component={Hompage} />
-            <Route path="/shop" component={ShopPage} />
-            <Route exact path="/checkout" component={CheckoutPage} />
-            <Route
-              exact
-              path="/signin"
-              render={() =>
-                currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
-              }
-            />
-          </Suspense>
-        </ErrorBoundary>
-      </Switch>
+      <StrictMode>
+        <Switch>
+          <ErrorBoundary>
+            <Suspense fallback={<Spinner />}>
+              <Route exact path="/" component={Hompage} />
+              <Route path="/shop" component={ShopPage} />
+              <Route exact path="/checkout" component={CheckoutPage} />
+              <Route
+                exact
+                path="/signin"
+                render={() =>
+                  currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
+                }
+              />
+            </Suspense>
+          </ErrorBoundary>
+        </Switch>
+      </StrictMode>
     </div>
   );
 };
